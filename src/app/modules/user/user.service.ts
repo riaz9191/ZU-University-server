@@ -6,19 +6,19 @@ import { User } from './user.model';
 
 const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // create a user object
-  const user : NewUser = {};
-  // const userData: Partial<TUser> = {};
+  // const user : NewUser = {};
+  const userData: Partial<TUser> = {};
 
   //if password is not given , use default password
-  user.password = password || config.default_password as string;
-  
+  userData.password = password || (config.default_password as string);
+
   //set student role
-  user.role = 'student';
+  userData.role = 'student';
 
   //set manually generated it
-  user.id = '2030100001'
+  userData.id = '2030100001';
   // create a user
-  const newUser = await User.create(user);
+  const newUser = await User.create(userData);
 
   //create a student
   if (Object.keys(newUser).length) {
