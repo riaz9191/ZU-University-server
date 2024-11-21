@@ -20,6 +20,8 @@ app.use(cors());
 app.use('/api/v1/students', StudentRoutes);
 app.use('/api/v1/users', UserRoutes);
 
+
+
 // const test = (req: Request, res: Response) => {
 //   const a = 10;
 //   res.send(a);
