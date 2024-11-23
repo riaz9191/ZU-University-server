@@ -6,6 +6,8 @@ import { User } from './user.model';
 
 const createStudentIntoDB = async (password: string, studentData: TStudent) => {
   // create a user object
+  // console.log('Student Data Before Processing:', studentData);
+
   // const user : NewUser = {};
   const userData: Partial<TUser> = {};
 
