@@ -4,7 +4,7 @@ import sendResponse from '../../utils/sendResponse';
 import { StudentServices } from './student.service';
 import catchAsync from '../../utils/catchAsync';
 
-const getSingleStudent = catchAsync(async (req, res) => {
+const getSingleStudent : RequestHandler = catchAsync(async (req, res) => {
   const { studentId } = req.params;
   const result = await StudentServices.getSingleStudentFromDB(studentId);
 
