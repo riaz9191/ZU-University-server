@@ -3,16 +3,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ErrorRequestHandler, NextFunction, Request, Response } from 'express';
-import { ZodError } from 'zod';
+import { ZodError, ZodIssue } from 'zod';
+import { TErrorSource } from '../interface/error';
 
 const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
   //default setting value
   let statusCode = err.statusCode || 500;
   let message = err.message || 'Something went wrong!';
-  type TErrorSource = {
-    path: string | number;
-    message: string;
-  }[];
+
   let errorSources: TErrorSource = [
     {
       path: '',
@@ -20,11 +18,27 @@ const globalErrorHandler: ErrorRequestHandler = (err, req, res, next) => {
     },
   ];
 
+  const handleZorError = (err: ZodError) => {
+    const errorSources: TErrorSource = err.issues.map((issue: ZodIssue) => {
+      return {
+        path: issue?.path[issue.path.length - 1],
+        message: issue.message,
+      };
+    });
+    const statusCode = 400;
+    return {
+      statusCode,
+      message: 'Zod Validation Error',
+      errorSources,
+    };
+  };
+
   if (err instanceof ZodError) {
-    statusCode = 400;
-    message = 'ami zod error';
+    const simplifiedError = handleZorError(err);
+
+    console.log(simplifiedError)
   }
-// ultimate return
+  // ultimate return
   return res.status(statusCode).json({
     success: false,
     message,
