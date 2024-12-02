@@ -6,8 +6,6 @@ import {
   TStudent,
   TUserName,
 } from './student.interface';
-import AppError from '../../errors/AppError';
-import httpStatus from 'http-status';
 
 const userNameSchema = new Schema<TUserName>({
   firstName: {
@@ -101,7 +99,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       },
       required: [true, 'Gender is required'],
     },
-    dateOfBirth: { type: String },
+    dateOfBirth: { type: Date },
     email: {
       type: String,
       required: [true, 'Email is required'],
@@ -140,13 +138,13 @@ const studentSchema = new Schema<TStudent, StudentModel>(
       type: Schema.Types.ObjectId,
       ref: 'AcademicSemester',
     },
-    academicDepartment: {
-      type: Schema.Types.ObjectId,
-      ref: 'AcademicDepartment',
-    },
     isDeleted: {
       type: Boolean,
       default: false,
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicDepartment',
     },
   },
   {
@@ -156,7 +154,7 @@ const studentSchema = new Schema<TStudent, StudentModel>(
   },
 );
 
-// virtual
+//virtual
 studentSchema.virtual('fullName').get(function () {
   return this?.name?.firstName + this?.name?.middleName + this?.name?.lastName;
 });
@@ -174,15 +172,6 @@ studentSchema.pre('findOne', function (next) {
 
 studentSchema.pre('aggregate', function (next) {
   this.pipeline().unshift({ $match: { isDeleted: { $ne: true } } });
-  next();
-});
-
-studentSchema.pre('findOneAndUpdate', async function (next) {
-  const query = this.getQuery();
-  const isStudentExist = await Student.findOne(query);
-  if (!isStudentExist) {
-    throw new AppError(httpStatus.NOT_FOUND, 'Student Not Found');
-  }
   next();
 });
 
