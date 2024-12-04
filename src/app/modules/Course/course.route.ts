@@ -10,16 +10,19 @@ router.post(
   CourseControllers.createCourse,
 );
 
-router.get('/',CourseControllers.getAllCourses);
+router.get('/', CourseControllers.getAllCourses);
 
 router.get('/:id', CourseControllers.getSingleCourse);
-// router.patch(
-//   '/:facultyId',
-//   validateRequest(
-//     academicFacultyValidation.updateAcademicFacultyValidationSchema,
-//   ),
-//   AcademicFacultyControllers.updateAcademicFaculty,
-// );
+router.patch(
+  '/:id',
+  validateRequest(
+    CourseValidation.updateCourseValidationSchema,
+  ),
+  CourseControllers.updateCourse,
+);
+
+router.put('/:courseId/assign-faculties',)
+
 router.delete('/:id', CourseControllers.deleteCourse);
 
 export const CourseRoutes = router;
