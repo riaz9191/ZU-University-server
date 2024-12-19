@@ -15,13 +15,20 @@ router.get('/', CourseControllers.getAllCourses);
 router.get('/:id', CourseControllers.getSingleCourse);
 router.patch(
   '/:id',
-  validateRequest(
-    CourseValidation.updateCourseValidationSchema,
-  ),
+  validateRequest(CourseValidation.updateCourseValidationSchema),
   CourseControllers.updateCourse,
 );
 
-router.put('/:courseId/assign-faculties',)
+router.put(
+  '/:courseId/assign-faculties',
+  validateRequest(CourseValidation.facultiesWithCourseValidationSchema),
+  CourseControllers.assignFacultiesWithCourse,
+);
+router.delete(
+  '/:courseId/remove-faculties',
+  validateRequest(CourseValidation.facultiesWithCourseValidationSchema),
+  CourseControllers.removeFacultiesWithCourse,
+);
 
 router.delete('/:id', CourseControllers.deleteCourse);
 
