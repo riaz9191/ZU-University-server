@@ -109,6 +109,7 @@ const getSingleSemesterRegistrationsFromDB = async (id: string) => {
 const updateSemesterRegistrationIntoDB = async (
   id: string,
   payload: Partial<TSemesterRegistration>,
+  
 ) => {
   /**
    * Step1: Check if the semester is exist
